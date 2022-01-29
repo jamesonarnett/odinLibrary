@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odin Practice</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body style="background-color: rgb(190, 245, 255); margin: 0">
+    <nav class="navbar">
+      <h1 class="title">LibraryTime</h1>
+
+      <div class="centerNewBookButton">
+        <p>
+          <button class="buttonCenter" onClick="{addBookToLibrary()}">
+            Submit New Book
+          </button>
+        </p>
+      </div>
+    </nav>
+
+    <div class="flexCenter">
+      <form class="flex">
+        <input
+          class="inputItem"
+          type="text"
+          name="bookTitle"
+          placeholder="Title"
+        />
+        <input
+          class="inputItem"
+          type="text"
+          name="author"
+          placeholder="Author"
+        />
+        <input
+          class="inputItem"
+          type="number"
+          name="pages"
+          placeholder="Page Count"
+        />
+        <label class="inputItem" for="read">Have you read it?</label>
+        <input class="inputItem" type="checkbox" name="read" />
+        <button class="submitButton" type="sumbit">+Add</button>
+      </form>
+    </div>
+
+    <div>
+      <ul id="bookList"></ul>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
