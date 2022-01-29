@@ -30,7 +30,6 @@ window.onclick = (e) => {
 };
 
 addBookToLibrary.onclick = (e) => {
-  e.preventDefault();
   addBook();
 };
 
@@ -78,11 +77,32 @@ const addBook = () => {
 
   let newBook = new Book(title, author, pages, read);
   myLibrary.push(newBook);
-  console.log(myLibrary);
+  updateLocalStorage();
 };
 
-myLibrary.forEach((item) => {
-  const aBook = `
+const getCheckValue = () => {
+  if (form.querySelector('input[name="read"]:checked').value == "yes")
+    return true;
+  else return false;
+};
+
+const updateLocalStorage = () => {
+  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+};
+
+function checkLocalStorage() {
+  if (localStorage.getItem("myLibrary")) {
+    myLibrary = JSON.parse(localStorage.getItem("myLibrary"));
+  } else {
+    myLibrary = myLibrary;
+  }
+}
+
+const render = () => {
+  checkLocalStorage();
+
+  myLibrary.forEach((item) => {
+    const aBook = `
   <div class="flexBook">
   <div class="insideBook">
   <h3>${item.title}</h3>
@@ -90,14 +110,13 @@ myLibrary.forEach((item) => {
   <h3>${item.author}</h3>
   <h4>${item.pages} Pages</h4>
   <h4> Read? ${item.read}</h4>
+
+  <button class="delete btn-danger">Delete</button>
   </div>
   </div>`;
 
-  mybookList.insertAdjacentHTML("afterbegin", aBook);
-});
-
-const getCheckValue = () => {
-  if (form.querySelector('input[name="read"]:checked').value == "yes")
-    return true;
-  else return false;
+    mybookList.insertAdjacentHTML("afterbegin", aBook);
+  });
 };
+
+render();
