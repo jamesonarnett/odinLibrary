@@ -1,4 +1,5 @@
 const mybookList = document.getElementById("insertBooksHere");
+
 const formTitle = document.getElementById("title");
 const formAuthor = document.getElementById("author");
 const formPages = document.getElementById("pages");
@@ -52,22 +53,12 @@ class Book {
     this.author = author;
     this.pages = pages;
     this.read = read;
-    this.info = () => {
-      console.log(
-        `${this.title} by ${this.author}, ${this.pages} pages, ${this.read} `
-      );
-    };
   }
 }
 
-// form.addEventListener("submit", (e) => {
-//   let bookTitle = form.elements[0].value;
-//   let bookAuthor = form.elements[1].value;
-//   let bookPages = form.elements[2].value;
-//   let bookRead = form.elements[3].value;
-
-//   return new Book(bookTitle, bookAuthor, bookPages, bookRead);
-// });
+const updateLocalStorage = () => {
+  localStorage.setItem(myLibrary, JSON.stringify(myLibrary));
+};
 
 const addBook = () => {
   title = formTitle.value;
@@ -86,10 +77,6 @@ const getCheckValue = () => {
   else return false;
 };
 
-const updateLocalStorage = () => {
-  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
-};
-
 function checkLocalStorage() {
   if (localStorage.getItem("myLibrary")) {
     myLibrary = JSON.parse(localStorage.getItem("myLibrary"));
@@ -98,12 +85,35 @@ function checkLocalStorage() {
   }
 }
 
+function removeBook(e) {
+  e = event.target.id;
+  let insideBook = event.target.parentNode;
+  let flexBook = insideBook.parentNode;
+  console.log(flexBook);
+
+  myLibrary.filter((item) => {
+    if (item.id == e) {
+      flexBook.remove(flexBook);
+
+      let library = JSON.parse(localStorage.getItem("myLibrary"));
+      let myLibrary = library.filter((book) => book.id != item.id);
+      localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+    }
+  });
+}
+
+function changeReadStatus() {
+  console.log("fuck me right?");
+}
+
 const render = () => {
   checkLocalStorage();
 
-  myLibrary.forEach((item) => {
-    const aBook = `
-  <div class="flexBook">
+  myLibrary.forEach((item, i) => {
+    item.id = i;
+
+    let aBook = `
+  <div id="${item.id}" class="flexBook">
   <div class="insideBook">
   <h3>${item.title}</h3>
   <hr />
@@ -111,7 +121,8 @@ const render = () => {
   <h4>${item.pages} Pages</h4>
   <h4> Read? ${item.read}</h4>
 
-  <button class="delete btn-danger">Delete</button>
+  <button id="${item.id}" class="delete btn-danger" onclick={removeBook()}>Delete</button>
+  <button style="font-size: 10px" onclick={changeReadStatus()}>Read?</button>
   </div>
   </div>`;
 
@@ -120,3 +131,4 @@ const render = () => {
 };
 
 render();
+console.log(myLibrary);
