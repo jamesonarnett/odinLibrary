@@ -1,12 +1,9 @@
 const mybookList = document.getElementById("insertBooksHere");
-
 const formTitle = document.getElementById("title");
 const formAuthor = document.getElementById("author");
 const formPages = document.getElementById("pages");
 const formIsRead = document.getElementById("isRead");
-
 const newBookButton = document.getElementById("newBookButton");
-
 const modal = document.getElementById("modal");
 const quit = document.getElementById("quitButton");
 const addBookToLibrary = document.getElementById("addButton");
@@ -69,17 +66,11 @@ const addBook = () => {
   title = formTitle.value;
   author = formAuthor.value;
   pages = formPages.value;
-  read = getCheckValue();
+  read = formIsRead.value;
 
   let newBook = new Book(title, author, pages, read);
   myLibrary.push(newBook);
   updateLocalStorage();
-};
-
-const getCheckValue = () => {
-  if (form.querySelector('input[name="read"]:checked').value == "yes")
-    return "Finished";
-  else return "Not read";
 };
 
 function checkLocalStorage() {
@@ -114,23 +105,16 @@ function removeBook(e) {
   });
 }
 
-function changeReadStatus(e) {
-  e = event.target;
-  console.log(e.id);
-  if (e.id == "Finished") {
-    e.id = "Not Finished";
-  }
-}
+function readStatus(e) {
+  e = event.target.id;
+  let id = document.getElementById(e);
+  let h4 = id.children[0].children[4];
 
-function readStatus() {
-  myLibrary.filter((item) => {
-    if (item.read == "Finished") {
-      console.log("Finished");
-      return item.read == "Not read";
-    } else {
-      return item.read == "Finished";
-    }
-  });
+  if (h4.textContent.trim() == "Not read") {
+    h4.textContent = "Finished";
+  } else {
+    h4.textContent = "Not read";
+  }
 }
 
 const render = () => {
@@ -146,13 +130,9 @@ const render = () => {
   <hr />
   <h3>${item.author}</h3>
   <h4>Pages: ${item.pages}</h4>
-  <h4 id=${item.read}> Read? ${readStatus()} </h4>
-  <button id="${
-    item.id
-  }" class="delete btn-danger" onclick={removeBook()}>Delete</button>
-  <button id=${
-    item.read
-  } "style="font-size: 10px" onclick={readStatus()}>Read?</button>
+  <h4 id=${item.id}>${item.read} </h4>
+  <button id="${item.id}" class="delete btn-danger" onclick={removeBook()}>Delete</button>
+  <button id=${item.id} "style="font-size: 10px" onclick={readStatus()}>Read?</button>
   </div>
   </div>`;
 
