@@ -41,10 +41,15 @@ let myLibrary = [
     title: "The Lord of the Rings",
     author: "J.R.R Tolkien",
     pages: 321,
-    read: true,
+    read: "Finished",
   },
 
-  { title: "Naruto", author: "Masashi Kishimoto", pages: 237, read: true },
+  {
+    title: "Naruto",
+    author: "Masashi Kishimoto",
+    pages: 237,
+    read: "Finished",
+  },
 ];
 
 class Book {
@@ -57,7 +62,7 @@ class Book {
 }
 
 const updateLocalStorage = () => {
-  localStorage.setItem(myLibrary, JSON.stringify(myLibrary));
+  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
 };
 
 const addBook = () => {
@@ -73,15 +78,22 @@ const addBook = () => {
 
 const getCheckValue = () => {
   if (form.querySelector('input[name="read"]:checked').value == "yes")
-    return true;
-  else return false;
+    return "Finished";
+  else return "Not read";
 };
 
 function checkLocalStorage() {
   if (localStorage.getItem("myLibrary")) {
     myLibrary = JSON.parse(localStorage.getItem("myLibrary"));
-  } else {
-    myLibrary = myLibrary;
+
+    if (myLibrary.length == 0) {
+      myLibrary.push({
+        title: "The Lord of the Rings",
+        author: "J.R.R Tolkien",
+        pages: 321,
+        read: "Finished",
+      });
+    }
   }
 }
 
@@ -102,8 +114,23 @@ function removeBook(e) {
   });
 }
 
-function changeReadStatus() {
-  console.log("fuck me right?");
+function changeReadStatus(e) {
+  e = event.target;
+  console.log(e.id);
+  if (e.id == "Finished") {
+    e.id = "Not Finished";
+  }
+}
+
+function readStatus() {
+  myLibrary.filter((item) => {
+    if (item.read == "Finished") {
+      console.log("Finished");
+      return item.read == "Not read";
+    } else {
+      return item.read == "Finished";
+    }
+  });
 }
 
 const render = () => {
@@ -118,17 +145,20 @@ const render = () => {
   <h3>${item.title}</h3>
   <hr />
   <h3>${item.author}</h3>
-  <h4>${item.pages} Pages</h4>
-  <h4> Read? ${item.read}</h4>
-
-  <button id="${item.id}" class="delete btn-danger" onclick={removeBook()}>Delete</button>
-  <button style="font-size: 10px" onclick={changeReadStatus()}>Read?</button>
+  <h4>Pages: ${item.pages}</h4>
+  <h4 id=${item.read}> Read? ${readStatus()} </h4>
+  <button id="${
+    item.id
+  }" class="delete btn-danger" onclick={removeBook()}>Delete</button>
+  <button id=${
+    item.read
+  } "style="font-size: 10px" onclick={readStatus()}>Read?</button>
   </div>
   </div>`;
 
     mybookList.insertAdjacentHTML("afterbegin", aBook);
   });
+  updateLocalStorage();
 };
 
 render();
-console.log(myLibrary);
